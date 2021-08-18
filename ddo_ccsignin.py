@@ -57,9 +57,10 @@ def main(ck):
         url = "https://api.m.jd.com/client.action?functionId=%s&clientVersion=9.2.2&build=89568&client=android&uuid=%s&%s" % (
         functionId, jduuid, sign)
         r=requests.post(url,data="body="+body,headers=headers)
-        print(r.text)
+        r=json.loads(r.text)
+        print("签到"+r["message"],"获得"+r["signData"]["amount"]+"红包")
     except:
-        print("err")
+        print("签到失败")
 
 if __name__ == '__main__':
     f = open("/jd/config/config.sh")
