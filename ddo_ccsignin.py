@@ -58,7 +58,10 @@ def main(ck):
         functionId, jduuid, sign)
         r=requests.post(url,data="body="+body,headers=headers)
         r=json.loads(r.text)
-        print("签到"+r["message"],"获得"+r["signData"]["amount"]+"红包")
+        if r["busiCode"]=="1002":
+            print("今日已签到")
+        else:
+            print("签到"+r["message"],"获得"+r["result"]["signResult"]["signData"]["amount"]+"红包")
     except:
         print("签到失败")
 
