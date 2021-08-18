@@ -66,4 +66,3 @@ if __name__ == '__main__':
     cookies = re.findall("\"(pt_key=.*?;pt_pin=.*?;)\"", f.read())
     for i in cookies:
         main(i)
-        doTasker(i)
