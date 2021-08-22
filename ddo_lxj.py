@@ -1,8 +1,8 @@
 # 京东领现金
 # Author:ddo
-# update time:2021/8/18
+# update time:2021/8/23
 import urllib
-
+import urllib.parse
 import requests
 import json
 import re
@@ -21,6 +21,17 @@ def randomstr(num):
         randomstr = randomstr + random.choice("abcdefghijklmnopqrstuvwxyz0123456789")
     return randomstr
 
+def getsign(functionid, body, jduuid):
+    data={
+        "functionId":functionid,
+        "body":body,
+        "uuid":jduuid,
+        "client":"android",
+        "clientVersion":"9.2.2"
+    }
+    sign=requests.post(url="https://service-ft43gk13-1302176878.sh.apigw.tencentcs.com/release/ddo",data=json.dumps(data)).text
+    # print(sign)
+    return sign
 
 def main(ck):
     try:
@@ -29,24 +40,16 @@ def main(ck):
             "Connection": "keep-alive",
             "User-Agent": "okhttp/3.12.1;jdmall;android;version/9.2.2;build/89568;screen/1440x2560;os/7.1.2;network/wifi",
             "Accept": "*/*",
-            "Referer": "http s://h5.m.jd.com/rn/42yjy8na6pFsq1cx9MJQ5aTgu3kX/index.html",
+            "Referer": "https://h5.m.jd.com/rn/42yjy8na6pFsq1cx9MJQ5aTgu3kX/index.html",
             "Accept-Encoding": "gzip, deflate",
             "Accept-Language": "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
             "cookie": ck,
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
         }
-        # st = str(int(time.time() * 1000))
         jduuid = randomstr(16)
-        # sign = jdsign.get_sign("cash_sign", "{\"breakReward\":0,\"inviteCode\":null,\"remind\":0,\"type\":0}", jduuid,
-        #                        "android", "9.2.2")
-        params = {
-            "functionId": "cash_sign",
-            "body": "{\"breakReward\":0,\"inviteCode\":null,\"remind\":0,\"type\":0}",
-            "uuid": jduuid,
-            "client": "android",
-            "clientVersion": "9.2.2"
-        }
-        sign = requests.post(url="https://sign.nz.lu/getSignFromJni", params=params, proxies=proxies).text
+        functionId= "cash_sign"
+        body= "{\"breakReward\":0,\"inviteCode\":null,\"remind\":0,\"type\":0}"
+        sign=getsign(functionId,body,jduuid)
         url = "https://api.m.jd.com/client.action?functionId=cash_sign&clientVersion=9.2.2&client=android&uuid=%s&%s" % (
             jduuid, sign)
         data = "body=%7B%22breakReward%22%3A0%2C%22inviteCode%22%3Anull%2C%22remind%22%3A0%2C%22type%22%3A0%7D"
@@ -71,14 +74,8 @@ def doTask(ck, body):
             "cookie": ck,
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
         }
-        params = {
-            "functionId": "cash_doTask",
-            "body": body,
-            "uuid": jduuid,
-            "client": "android",
-            "clientVersion": "9.2.2"
-        }
-        sign = requests.post(url="https://sign.nz.lu/getSignFromJni", params=params, proxies=proxies).text
+        functionId= "cash_doTask"
+        sign=getsign(functionId,body,jduuid)
         url = "https://api.m.jd.com/client.action?functionId=cash_doTask&clientVersion=9.2.2&build=89568&client=android&uuid=%s&%s" % (
         jduuid, sign)
         data = "body=" + urllib.parse.quote_plus(body)
@@ -109,7 +106,7 @@ def doTasker(ck):
             "client": "android",
             "clientVersion": "9.2.2"
         }
-        sign = requests.post(url="https://sign.nz.lu/getSignFromJni", params=params, proxies=proxies).text
+        sign = requests.post(url="http://1.117.2.106:63343/getSignFromJni", data=params, proxies=proxies).text
         url = "https://api.m.jd.com/client.action?functionId=cash_homePage&clientVersion=9.2.2&build=89568&client=android&uuid=%s&%s" % (
         jduuid, sign)
         data = "body=%7B%7D"
