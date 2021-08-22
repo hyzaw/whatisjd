@@ -7,7 +7,6 @@ import urllib
 import uuid
 import re
 import urllib.parse
-import jdsign
 
 proxies = {
     "http": None,
