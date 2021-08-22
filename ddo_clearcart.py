@@ -1,5 +1,3 @@
-#京东清空购物车
-
 # 清空购物车
 import time
 
@@ -25,14 +23,15 @@ def randomstr(num):
 
 
 def getsign(functionid, body, jduuid):
-    data = {
-        "functionId": functionid,
-        "body": body,
-        "uuid": jduuid,
-        "client": "android",
-        "clientVersion": "9.2.2"
+    data={
+        "functionId":functionid,
+        "body":body,
+        "uuid":jduuid,
+        "client":"android",
+        "clientVersion":"9.2.2"
     }
-    sign = requests.post(url="", data=data, proxies=proxies).text
+    sign=requests.post(url="https://service-ft43gk13-1302176878.sh.apigw.tencentcs.com/release/ddo",data=json.dumps(data)).text
+    # print(sign)
     return sign
 
 
@@ -91,9 +90,9 @@ def main(ck):
         url = "https://api.m.jd.com/client.action?functionId=%s&clientVersion=9.2.2&build=89568&client=android&uuid=%s&%s" % (
         functionId, jduuid, sign)
         r = requests.post(url, data="body=" + urllib.parse.quote(body), headers=headers, proxies=proxies)
+        print(r.text)
     except:
         print("error")
-    print(r.text)
 
 
 if __name__ == '__main__':
@@ -101,4 +100,3 @@ if __name__ == '__main__':
     cookies = re.findall("\"(pt_key=.*?;pt_pin=.*?;)\"", f.read())
     for i in cookies:
         main(i)
-        doTasker(i)
