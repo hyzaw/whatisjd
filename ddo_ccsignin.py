@@ -7,6 +7,7 @@ import urllib
 import uuid
 import re
 import urllib.parse
+import jdsign
 
 proxies = {
     "http": None,
@@ -22,14 +23,15 @@ def randomstr(num):
 
 
 def getsign(functionid, body, jduuid):
-    data = {
-        "functionId": functionid,
-        "body": body,
-        "uuid": jduuid,
-        "client": "android",
-        "clientVersion": "9.2.2"
+    data={
+        "functionId":functionid,
+        "body":body,
+        "uuid":jduuid,
+        "client":"android",
+        "clientVersion":"9.2.2"
     }
-    sign = requests.post(url="", data=data, proxies=proxies).text
+    sign=requests.post(url="https://service-ft43gk13-1302176878.sh.apigw.tencentcs.com/release/ddo",data=json.dumps(data)).text
+    # print(sign)
     return sign
 
 
@@ -58,6 +60,7 @@ def main(ck):
         functionId, jduuid, sign)
         r=requests.post(url,data="body="+body,headers=headers)
         r=json.loads(r.text)
+        # print(r)
         if r["busiCode"]=="1002":
             print("今日已签到")
         else:
