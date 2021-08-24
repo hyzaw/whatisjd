@@ -29,7 +29,7 @@ def getsign(functionid, body, jduuid):
         "client":"android",
         "clientVersion":"9.2.2"
     }
-    sign=requests.post(url="https://service-ft43gk13-1302176878.sh.apigw.tencentcs.com/release/ddo",data=json.dumps(data)).text
+    sign=requests.post(url="https://jdsign.tk/ddo",data=json.dumps(data)).text
     # print(sign)
     return sign
 
